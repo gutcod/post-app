@@ -16,7 +16,7 @@ class PostForm extends Component {
     event.preventDefault();
     const { title } = this.state;
     if (!title.trim()) {
-      return this.props.showAlert("alert");
+      return this.props.showAlert("input is can not be empty");
     }
     const newPost = {
       title,
