@@ -1,8 +1,53 @@
-import { CREATE_POST } from "./type";
+import { CREATE_POST, FETCH_POSTS, HIDE_ALERT, HIDE_LOADER, SHOW_ALERT, SHOW_LOADER } from "./type";
 
 export function createPost(post) {
   return {
     type: CREATE_POST,
     payload: post,
+  };
+}
+//asyncrone
+export function fetchPosts() {
+  return async dispatch => {
+    try {
+      dispatch(showLoader());
+      const response = await fetch("http://jsonplaceholder.typicode.com/posts?_limit=5");
+      const json = await response.json();
+      setTimeout(() => {
+        dispatch({ type: FETCH_POSTS, payload: json });
+        dispatch(hideLoader());
+      }, 500);
+    } catch (e) {
+      dispatch(showAlert("Something is wrong"));
+      dispatch(hideLoader());
+    }
+  };
+}
+//loader
+export function showLoader() {
+  return {
+    type: SHOW_LOADER,
+  };
+}
+export function hideLoader() {
+  return {
+    type: HIDE_LOADER,
+  };
+}
+//alert
+export function showAlert(text) {
+  return dispatch => {
+    dispatch({
+      type: SHOW_ALERT,
+      paylaod: text,
+    });
+    setTimeout(() => {
+      dispatch(hideAlert());
+    }, 3000);
+  };
+}
+export function hideAlert() {
+  return {
+    type: HIDE_ALERT,
   };
 }
